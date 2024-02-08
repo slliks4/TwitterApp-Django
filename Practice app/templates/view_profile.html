@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>
+        {{profiles.user.username}}'s Profile
+    </h1>
+    <div class="container">
+        <h4>
+            <a href="{% url 'home' %}">home</a>
+        </h4>
+        {% if profiles %}
+            <div class='profile_list'>
+                <h2>username : {{profiles.user.username}}</h2>
+                <br>
+                <p>
+                    bio : {{profiles.bio}}
+                </p>
+                <br>
+                <p>
+                    date modified : {{profiles.date_modified}}
+                </p>
+                <br><br>
+                <strong> following </strong>
+                <br>
+                {% for following in profiles.follows.all  %}
+                    <p>
+                        <a href="{% url 'view_profile' following.user.profile.id %}">{{following}}</a>
+                    </p>
+                {% endfor %}
+                <strong> followed by </strong>
+                
+                {% for following in profiles.followed_by.all  %}
+                    <p>
+                        <a href="{% url 'view_profile' following.user.profile.id %}">{{following}}</a>
+                    </p>
+                {% endfor %}        
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {% if profiles in user.profile.follows.all %}
+                    <button type="submit" name="follow" value="unfollow">unfollow {{profiles.user.username}}</button>
+                    {% elif profiles.user.id == request.user.id %}
+
+                    {% else %}
+                        <button type="submit" name="follow" value="follow">follow {{profiles.user.username}}</button>
+                    {% endif %}
+                </form>        
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

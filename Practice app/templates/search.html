@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {{user}}
+    <br><br>
+    {% if user.is_authenticated %}
+        <a href="{% url 'view_profile' request.user.profile.id %}"> <b> My Profile</b></a>
+        {% else %}
+        log in to view profile
+    {% endif %}
+    <br>
+    {% for message in messages %}
+        {{message}}
+    {% endfor %}
+    {% if searched %}
+    <h1>you searched for {{searched}}</h1>
+    {% else %}
+    <h1>you forgot to search</h1>
+    {% endif %}
+    <br>
+    <form action="{% url 'search_users' %}" method="POST">
+        {% csrf_token %}
+        <input type="search" name="search_users" id="" placeholder="search users">
+        <button type="submit">search</button>
+    </form>
+    <br>
+    <a href="{% url 'profile_list' %}"> profile list </a>
+    {% for search_user in search_users %}
+        <div class='profile_list'>
+            <a href="{% url 'view_profile' search_user.id %}">{{search_user.user.username}}</a>
+            <br>
+            <h2>{{search_user.user.first_name}}</h2>
+            <br>
+            <p>
+                bio :{{search_user.bio}}
+            </p>
+            <br>
+            <p>
+                date modified : {{search_user.date_modified}}
+            </p>
+        </div>
+    {% endfor %}
+</body>
+</html>

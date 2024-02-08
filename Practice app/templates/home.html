@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{user}}
+    <br><br>
+    {% if user.is_authenticated %}
+        <a href="{% url 'view_profile' request.user.profile.id %}"> <b> My Profile</b></a>
+        {% else %}
+        log in to view profile
+    {% endif %}
+    <br>
+    {% for message in messages %}
+        {{message}}
+    {% endfor %}
+    <h1>this is the home page</h1>
+    <br>
+    <form action="{% url 'search_users' %}" method="POST">
+        {% csrf_token %}
+        <input type="search" name="search_users" id="" placeholder="search users">
+        <button type="submit">search</button>
+    </form>
+    <br>
+    <a href="{% url 'profile_list' %}"> profile list </a>
+
+</body>
+</html>

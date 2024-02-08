@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>profile list</h1>
+    <div class="container">
+        <h4>
+            <a href="{% url 'home' %}">home</a>
+        </h4>
+        {% if profiles %}
+            {% for profile in profiles %}
+                <div class='profile_list'>
+                    <a href="{% url 'view_profile' profile.id %}">{{profile.user.username}}</a>
+                    <br>
+                    <h2>{{profile.user.first_name}}</h2>
+                    <br>
+                    <p>
+                        bio :{{profile.bio}}
+                    </p>
+                    <br>
+                    <p>
+                        date modified : {{profile.date_modified}}
+                    </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>
