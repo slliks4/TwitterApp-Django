@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="post">
+        <header>
+            <a href="{% url 'home' %}">
+                home
+            </a>
+            <h1>your profile</h1>
+        </header>
+        <div>
+            <p>
+               {{profile.users.username}}
+            </p>
+            {% if profile.profile_pic %}
+                <img src="{{profile.profile_pic.url}}"width="80px" height="80px" alt="" >
+                {% else %}
+                <img src="{% static 'img/avatar.jpg' %}" alt="" >
+             {% endif %}
+             <p>
+                {{profile.user.first_name}} {{profile.user.last_name}}
+             </p>
+             {% if profile.bio %}
+                <p>
+                    {{profile.bio}}
+                </p>
+            {% else %}
+                <p>
+                    no bio yet
+                </p>
+            {% endif %}
+            <br><br>
+            {% if request.user.id != profile.users_id %}
+            {% else %}
+                <a href="{% url 'edit_profile' %}">edit profile</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

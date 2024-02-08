@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="comment_page">
+        <header>
+            <a href="{% url 'home' %}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            <h1>add post</h1>
+        </header>
+        <div class="notes">
+            {% for message in messages %}
+            <div class="login_error">
+                <p>{{message}}</p>
+            </div>
+            {% endfor %}
+            <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit">add</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

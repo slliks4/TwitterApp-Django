@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="comment_page">
+        <header>
+            <a href="{% url 'home' %}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            <h1>add post</h1>
+        </header>
+        <div class="notes">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <select name="status">
+                    <option value="world">world</option>
+                    <option value="friends">friends</option>
+                </select>
+                <br><br>
+                <input type="text" name="title" placeholder="title" required>
+                <textarea name="content" id="" placeholder="add post" required></textarea>
+                <button type="submit">add</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,399 @@
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+body{
+    position: relative;
+    height: 100vh;
+    background:url('img/336375.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add_notes{
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:linear-gradient(rgba(0, 0, 0, 0.736), rgba(0, 0, 0, 0.769)),url('img/moon.png');
+    background-position: center;
+    background-size: cover;
+    color: white;
+    padding: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 3px 2px 80px 8px rgba(248, 248, 248, 0.432);
+    left: auto;
+    top: 85%;
+    animation: others ease-in-out 5s infinite;
+}
+@keyframes others {
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(-30px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+.add_notes a{
+    font-size: 20px;
+    transition: all 0.5s ease;
+    color: white;
+}
+.add_notes .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+    opacity: 0;
+    transition: opacity 2s;
+}
+  
+.add_notes .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+.add_notes:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+header a{
+    color: white;
+}
+.like_color{
+    color: red;
+}
+.post{
+    color: white;
+    width: 80%;
+    height: 90vh;
+    border-radius: 20px;
+    padding: 50px;
+    overflow-y: scroll;
+    box-shadow: 3px 2px 80px 8px rgba(248, 248, 248, 0.432);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(7, 7, 7, 0.3);
+    overflow-y: scroll;
+    scrollbar-color: transparent;  
+}
+.post::-webkit-scrollbar{
+    color: transparent;
+}
+.post header h1{
+    text-transform: capitalize;
+    text-align: center;
+    padding-bottom: 40px;
+}
+.posts{
+    border-bottom: 1px solid white;
+    padding: 20px 10px;
+}
+.posts .top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.posts a{
+    text-decoration: none;
+    color: white;
+}
+.posts h1{
+    font-size: 20px;
+    text-transform: capitalize;
+}
+.posts p{
+    padding: 20px 0px;
+}
+.posts .options{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.posts .options div img{
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+.comments img{
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+.posts .options>div{
+    display: flex;
+    align-items: center;
+    padding: 0px 20px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.posts .options>div:last-child{
+    padding-right: 0px;
+}
+.posts .options>div a{
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+}
+
+/* COMMENT */
+.comment_page{
+    color: white;
+    width: 80%;
+    height: 90vh;
+    border-radius: 20px;
+    padding: 50px;
+    overflow-y: scroll;
+    box-shadow: 3px 2px 80px 8px rgba(248, 248, 248, 0.432);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(7, 7, 7, 0.3);
+    overflow-y: scroll;
+    scrollbar-color: transparent;  
+}
+.comment_page::-webkit-scrollbar{
+    color: transparent;
+}
+.comment_page header h1{
+    text-transform: capitalize;
+    text-align: center;
+    padding-bottom: 40px;
+}
+.comment_page .top{
+    text-transform: capitalize;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.comment_page .top h1{
+    font-size: 20px;
+}
+.comments_show{
+    margin: 20px 0px;
+    border: 1px solid white;
+}
+.comments{
+    background-color: rgba(0, 0, 0, 0.921);
+    padding: 15px;
+    width: 100%;
+    height: 200px;
+    overflow-y: scroll;
+    scrollbar-color: transparent;  
+}
+.comments::-webkit-scrollbar{
+    color: transparent;
+}
+.comments>div:first-child{
+    margin-top: 10px;
+}
+.comments>div{
+    margin: 40px 0px;
+}
+.comments .header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.comments .header h1{
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    text-transform: capitalize;
+}
+.comments .options{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+.comments .options a{
+    color: blue;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.comments .options a:last-child{
+    padding-left: 10px;
+}
+.comment input[type=text]{
+    width: 80%;
+    padding: 15px;
+    background-color: transparent;
+    border-top: 1px solid white;
+    color: white;
+    font-size: 20px;
+    outline: none;
+}
+.comment input[type=text]::placeholder{
+    font-size: 20px;
+}
+.comment button{
+    width: 19.5%;
+    padding: 15px;
+    margin: 0;
+    background-color: transparent;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    text-transform: capitalize;
+    color: white;
+    font-size: 20px;
+}
+.comment_page .option{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.comment_page .option button{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 15px;
+}
+.comment_page .option>div{
+    padding: 0px 20px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.comment_page .option>div:last-child{
+    padding-right: 0px;
+}
+.comment_page .option>div a{
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+}
+.post .form input{
+    width: 100%;
+    padding: 15px;
+    background-color: transparent;
+    border-top: 1px solid white;
+    color: white;
+    font-size: 20px;
+    outline: none;
+}
+.post .form button{
+    width: 100%;
+    padding: 15px;
+    background-color: white;
+    border: 1px solid white;
+    color: black;
+    font-size: 20px;
+}
+.notes form input{
+    width: 100%;
+    padding: 15px;
+    background-color: transparent;
+    border-top: 1px solid white;
+    color: white;
+    font-size: 20px;
+    outline: none;
+}
+.notes form textarea{
+    background-color: transparent;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    outline: none;
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+    min-width: 100%;
+    min-height: 200px;
+    max-width: 100%;
+    max-height: 200px;
+}
+.notes form select{
+    padding: 15px;
+    background-color: transparent;
+    border: 1px solid white;
+    font-size: 20px;
+    color: white;
+}
+.notes form option{
+    background-color: black;
+    font-size: 20px;
+    color: white;
+}
+.notes form select:hover{
+    background-color: black;
+    color: white;
+}
+.notes form button{
+    width: 100%;
+    padding: 15px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    font-size: 20px;
+}
+.login input{
+    width: 100%;
+    margin: 20px 0px;
+    padding: 15px;
+    background-color: transparent;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 20px;
+    outline: none;
+}
+.login button{
+    width: 100%;
+    padding: 15px;
+    margin: 20px 0px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.comment_page .confirm{
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment_page .confirm button{
+    padding: 5px;
+    font-size: 20px;
+    background-color: white;
+    color: black;
+}
+.comment_page .confirm a{
+    border: 1px solid white;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px;
+    background-color: white;
+    color: black;
+}

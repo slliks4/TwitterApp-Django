@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="post">
+        <header>
+            <a href="{% url 'user_signup' %}">
+                signup
+            </a>
+            <a href="{% url 'home' %}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            <h1>login</h1>
+        </header>
+        <div class="login">
+            {% for message in messages %}
+            <div class="login_error">
+                <p>{{message}}</p>
+            </div>
+            {% endfor %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="enter your username" required>
+                <input type="password" name="password" placeholder="enter your password">
+                <button type="submit">login</button>
+                <br>
+                <a href="{% url 'password_reset' %}">forget password</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

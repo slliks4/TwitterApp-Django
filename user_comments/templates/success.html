@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="comment_page">
+        <header>
+            <h1>account created successfully</h1>
+        </header>
+        <div class="posts">
+            <a href="{% url 'user_login' %}">login</a>
+        </div>
+    </div>
+{% endblock %}

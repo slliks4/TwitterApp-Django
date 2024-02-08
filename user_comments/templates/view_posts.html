@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="comment_page">
+        <header>
+            <a href="{% url 'home' %}">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            &nbsp;&nbsp;&nbsp;
+            {% if request.user == posts.users %}
+            <a href="{% url 'delete_post' posts.slug %}">delete</a>
+            {% else %}
+            {% endif %}
+            <h1>view post</h1>
+        </header>
+        <div class="notes">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <select name="status" value="{{posts.status}}">
+                    <option value="world">world</option>
+                    <option value="friends">friends</option>
+                </select>
+                <br><br>
+                <input type="text" name="title" placeholder="enter title" value="{{posts.title}}" required>
+                <textarea name="content" id="" placeholder="enter content" required>{{posts.content}}</textarea>
+                <button type="submit">add</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

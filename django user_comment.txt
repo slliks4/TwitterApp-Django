@@ -1,0 +1,157 @@
+______ on your comment models add a foreign key connecting to your main post you want to comment to reflect on 
+
+posts = models.ForeignKey(Posts, on_delete=models.CASCADE, related_name="comments")
+
+next on your templates to get the comments 
+
+{% if not post.comments.all %}
+                    <div>
+                        <div class="header">
+                            <h1>no comments</h1>
+                        </div>
+                    </div>
+                {% else %}
+                    {% for comment in post.comments.all %}
+
+                    {% endfor %}
+{% endif %}
+
+THEN FOR YOUR VIEWS.PY 
+
+import get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import Http404
+
+def comment(request,slug):
+    user_posts = Posts.objects.get(slug = slug)
+    comment_posts = get_object_or_404(Posts, slug=slug)
+    if request.method == 'POST':
+        user_comment = request.POST['user_comments']
+        form = Comments(body=user_comment,posts=comment_posts)
+        form.save()
+        return render(request, 'comment.html',{'post':user_posts})
+    else:
+        return render(request, 'comment.html',{'post':user_posts})
+
+
+
+
+
+_______ COMMENT TO SHOW WITH THE USERNAME THAT POSTED IT
+
+on your comment models add a foreign key connecting to your main post you want to comment to reflect on 
+
+users = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    user = request.user
+    if not user.is_authenticated:
+        raise Http404("The user is not found")
+    if request.method == 'POST':
+    	  form = Comments(users=user)	
+
+
+
+_______ HOW TO LIKE AND UNLIKE A COMMENT
+
+in your models.py the place you want to implement the like function add this code below
+
+likes = models.ManyToManyField(User, related_name='posts', blank=True)
+    def total_likes(self):
+        return self.likes.count()
+
+in your template create a form you can use slug or pk as the unique id 
+            <form action="{% url 'like_post' post.slug %}" method="POST">
+                {% csrf_token %}
+                {% if liked %}
+                    <button type="submit" name="post_slug" value="{{post.slug}}">
+                        <div class="like like_color"><i class="fa fa-heart" onclick="Like()" aria-hidden="true"  id="like"></i></div>
+                    </button>
+                {% else %}
+                    <button type="submit" name="post_slug" value="{{post.slug}}">
+                        <div class="like"><i class="fa fa-heart" onclick="Like()" aria-hidden="true"  id="like"></i></div>
+                    </button>
+                {% endif %}
+            </form>
+
+then create your url
+path('like_post/<str:slug>', views.like_post, name='like_post'),
+then your views
+def like_post(request,slug):
+    post = get_object_or_404(Posts, slug=request.POST.get('post_slug'))
+    liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    return HttpResponseRedirect(reverse('comment', args=[str(slug)]))
+
+where you want to add the like counter in your views add this code below    
+
+    comment_posts = get_object_or_404(Posts, slug=slug)
+    total_likes = comment_posts.total_likes()
+    liked = False
+    if comment_posts.likes.filter(id=request.user.id):
+        liked = True
+    user = request.user
+then pass total_likes and likes as a context
+{{total_likes}}
+
+_______ HOW TO EDIT YOUR POST OR COMMENTS 
+create a forms.py file then do the following below 
+from django import forms
+from .models import Posts
+
+class Addpost(forms.ModelForm):
+    class Meta:
+        model=Posts
+        fields=('title','content') or fields= __all__
+
+then in your views.py 
+@login_required(login_url='user_login')
+def view_post(request,slug):
+    user_posts = Posts.objects.get(slug=slug)
+    if request.method == 'POST':
+        form = Addpost(instance=user_posts, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        else:
+            raise Http404("invalid")
+    else:
+        return render(request, 'view_posts.html',{'posts':user_posts})
+
+then in your html input add value="{{posts.title}}"
+
+
+_________ HOW TO DELETE POST OR COMMENT
+def delete_post(request, slug):
+    user_posts = Posts.objects.get(slug=slug)
+    user_posts.delete()
+    return redirect('home')
+
+_________ HOW TO SPECIFY WHAT USERS CAN DO
+in the template you want to work with use the code below
+{% if request.user == posts.users %}
+
+_________ HOW TO SEARCH FOR A POST
+in your views
+def Searchrequest):
+    if request.method == 'POST':
+        searched = request.POST['search']
+        search = Post.objects.filter(name__contains=searched)
+        return render(request, 'search.html',{'search':search,'searched':searched})
+    else:
+        return render(request, 'home.html')
+in your template
+{% if searched %}
+    <h1>you searched for {{searched}}</h1>
+    {% else %}
+    <h1>you forgot to search</h1>
+    {% endif %}
+    <br>
+    <form action="{% url 'search' %}" method="POST">
+        {% csrf_token %}
+        <input type="search" name="search" id="" placeholder="search users">
+        <button type="submit">search</button>
+    </form>

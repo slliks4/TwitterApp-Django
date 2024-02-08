@@ -1,0 +1,107 @@
+_______ HOW TO REMOVE GROUPS AND CUSTOMIZE THE USER PAGE IN THE ADMIN
+open your admin.py and do the following below
+from django.contrib.auth.models import Group,User
+
+admin.site.unregister(Group)
+
+class user_model(admin.ModelAdmin):
+    model = User
+    fields = ['username']
+
+admin.site.unregister(User)
+admin.site.register(User,user_model)
+
+_______ HOW TO CREATE A FOLLOW AND UNFOLLOW FIELD 
+in your models.py create a field in your model use the code below as a guide
+follows = models.ManyToManyField("self", related_name='followed_by',symmetrical=False,blank=True)
+NOTE: symmetrical = false; means if i follow you, it will not make you follow me back. 
+
+_______ HOW TO MIX PROFILE INFO INTO THE USER INFO 
+in your admin.py
+class Profile_inline(admin.StackedInline):
+    model = Profile
+
+class user_model(admin.ModelAdmin):
+    model = User
+    fields = ['username'] or you can user fieldsets
+    fieldsets = (
+        (None, {'fields': ('email', 'password', 'username')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    inlines = [Profile_inline]
+
+________ automatically creating a user_profile when they create an account
+django signals
+first in your models.py import your receiver and post_save
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+next create a function to handle what you want to be automatically created
+
+@receiver(post_save, sender=User)    
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+
+________ automatically allows user to follow their self
+add this after the user_profile.save() in your models
+        user_profile.follows.set([instance.profile.id])
+        user_profile.save()
+
+_______ profile list
+in your views.py to exclude the login user profile from showing in the list
+    user_profile = Profile.objects.exclude(user=request.user)
+
+_______ listing followers and people following you
+in your template
+                {% for following in profiles.follows.all  %}
+                    <p>
+                        <a href="{% url 'view_profile' following.user.profile.id %}">{{following}}</a>
+                    </p>
+                {% endfor %}
+                <strong> followed by </strong>
+                
+                {% for following in profiles.followed_by.all  %}
+                    <p>
+                        <a href="{% url 'view_profile' following.user.profile.id %}">{{following}}</a>
+                    </p>
+                {% endfor %}   
+
+_______ viewing user profiles
+in your views.py
+def View_profile(request,id):
+    if request.user.is_authenticated:
+        profiles = Profile.objects.get(id=id)
+    else:
+        messages.info(request,'you must be logged in to view this page')
+        return redirect('home')
+
+    return render(request,'view_profile.html',{'profiles':profiles})
+
+________ follow and unfollow users
+in your templates
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {% if profiles in user.profile.follows.all %}
+                    <button type="submit" name="follow" value="unfollow">unfollow {{profiles.user.username}}</button>
+                    {% elif profiles.user.id == request.user.id %}
+
+                    {% else %}
+                        <button type="submit" name="follow" value="follow">follow {{profiles.user.username}}</button>
+                    {% endif %}
+                </form>   
+in your views
+in your view profile views
+        if request.method == 'POST':
+            current_user_profile = request.user.profile
+            action = request.POST['follow']
+
+            if action == "unfollow":
+                current_user_profile.follows.remove(profiles)
+            elif action == "follow":
+                current_user_profile.follows.add(profiles)
+            
+            current_user_profile.save()
